@@ -1,0 +1,12 @@
+#app {
+    margin: 5px 20px;
+}
+
+#divClientNumbers {
+    padding-left: 4px;
+    display: none;
+}
+
+.error {
+    color: red;
+}
