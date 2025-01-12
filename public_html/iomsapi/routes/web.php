@@ -50,3 +50,11 @@ Route::delete('apikey/{id}', [
     'as'   => 'apikey.destroy',
     'uses' => 'Iomsapi\ApikeyController@destroy'
 ]);
+Route::get('/clear-cache', function() {
+    $exitCode = Artisan::call('cache:clear');
+    return $exitCode;
+});
+Route::get('/config-cache', function() {
+    $exitCode = Artisan::call('config:cache');
+    return $exitCode;
+});

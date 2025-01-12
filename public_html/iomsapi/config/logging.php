@@ -54,6 +54,27 @@ return [
             'days' => 14,
         ],
 
+        'hexon' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/hexon.log'),
+            'level' => 'debug',
+            'days' => 28,
+        ],
+
+        'leaseprice' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/leaseprice.log'),
+            'level' => 'debug',
+            'days' => 14,
+        ],
+
+        'iomsapi' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/iomsapi.log'),
+            'level' => 'debug',
+            'days' => 14,
+        ],
+
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),

@@ -2,6 +2,10 @@
     margin: 5px 20px;
 }
 
+#apiKeyForm input, #apiKeyForm select {
+    margin-top: -6px;
+}
+
 #divClientNumbers {
     padding-left: 4px;
     display: none;
@@ -9,4 +13,26 @@
 
 .error {
     color: red;
+}
+
+.subLabel {
+    font-size: small;
+    font-style: italic;
+    color: grey;
+    padding-left: 15px;
+    margin-top: -10px;
+    margin-bottom: 8px;
+}
+
+#laravel_crud th {
+    background-color: #e2f0fb;
+    cursor: pointer;
+}
+
+#laravel_crud th.active {
+    background-color: #c7e6fd;
+}
+
+#apiKeys-crud tr:hover {
+    background-color: #e5f4fc;
 }

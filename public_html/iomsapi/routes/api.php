@@ -76,3 +76,24 @@ Route::group(
 
     Route::get('lease', ['uses' => 'IomsapiController@getLease']);
 });
+
+
+Route::group(
+    [
+        'namespace' => 'Iomsapi\V6',
+        'prefix' => 'v6',
+    ], function () {
+    Route::get('inventory',  ['uses' => 'IomsapiController@getInventory']);
+
+    Route::get('inventory/list',  ['uses' => 'IomsapiController@getInventoryList']);
+
+    Route::get('inventory/{id}', ['uses' => 'IomsapiController@getInventoryItem']);
+
+    Route::get('inventory/{id}/images', ['uses' => 'IomsapiController@getInventoryItemImages']);
+
+    Route::get('clients', ['uses' => 'IomsapiController@getClients']);
+
+    Route::get('clients/{id}', ['uses' => 'IomsapiController@getClient']);
+
+    Route::get('lease', ['uses' => 'IomsapiController@getLease']);
+});
