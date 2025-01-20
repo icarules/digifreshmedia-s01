@@ -33,9 +33,9 @@ class Inventory extends Model
 //        'asconfiguratie',
         'calculated_leasetermijn',
 //        'wegenbelasting_kwartaal',
-//        'accessoires',
-//        'accessoiregroepen',
-//        'zoekaccessoires',
+        'accessoires',
+        'accessoiregroepen',
+        'zoekaccessoires',
 //        'optie_pakketten',
         'videos',
 //        'klantgegevens',
@@ -210,7 +210,7 @@ class Inventory extends Model
     public function getImagesAttribute()
     {
         $imgField = $this->attributes['images'];
-        $imgArray = $imgField ? explode(",", $imgField) : [];
+        $imgArray = $imgField ? explode("|", $imgField) : [];
 
         $images = [];
         foreach ($imgArray as $img) {
@@ -341,23 +341,27 @@ class Inventory extends Model
                             }
                         } else {
                             foreach ($json['accessoiregroepen']['accessoiregroep'] as $accessoiregroep) {
-                                if (array_key_exists('@attributes', $accessoiregroep) && array_key_exists('naam', $accessoiregroep['@attributes'])) {
-                                    $name = $accessoiregroep['@attributes']['naam'];
-                                    if (is_array($accessoiregroep['accessoire'])) {
-                                        foreach ($accessoiregroep['accessoire'] as $value) {
-                                            $accessoiregroepen[$name][] = $value;
+                                if (is_array($accessoiregroep)) {
+                                    if (array_key_exists('@attributes', $accessoiregroep) && array_key_exists('naam', $accessoiregroep['@attributes'])) {
+                                        $name = $accessoiregroep['@attributes']['naam'];
+                                        if (is_array($accessoiregroep['accessoire'])) {
+                                            foreach ($accessoiregroep['accessoire'] as $value) {
+                                                $accessoiregroepen[$name][] = $value;
+                                            }
+                                        } else {
+                                            $accessoiregroepen[$name][] = $accessoiregroep['accessoire'];
                                         }
                                     } else {
-                                        $accessoiregroepen[$name][] = $accessoiregroep['accessoire'];
-                                    }
-                                } else {
-                                    if (array_key_exists('naam', $accessoiregroep) && array_key_exists('value', $accessoiregroep)) {
-                                        $name = $accessoiregroep['naam'];
-                                        if (is_array($accessoiregroep['value'])) {
-                                            foreach ($accessoiregroep['value'] as $accessoires) {
-                                                if (is_array($accessoires)) {
-                                                    foreach ($accessoires as $accessoire) {
-                                                        $accessoiregroepen[$name][] = $accessoire['value'];
+                                        if (array_key_exists('naam', $accessoiregroep) && array_key_exists('accessoire', $accessoiregroep)) {
+                                            $name = $accessoiregroep['naam'];
+                                            if (is_array($accessoiregroep['accessoire'])) {
+                                                foreach ($accessoiregroep['accessoire'] as $accessoires) {
+                                                    if (is_array($accessoires)) {
+                                                        foreach ($accessoires as $accessoire) {
+                                                            $accessoiregroepen[$name][] = $accessoire['accessoire'];
+                                                        }
+                                                    } else {
+                                                        $accessoiregroepen[$name][] = $accessoires;
                                                     }
                                                 }
                                             }

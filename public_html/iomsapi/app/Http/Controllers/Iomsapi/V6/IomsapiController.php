@@ -98,7 +98,7 @@ class IomsapiController extends Controller
             'merk'                     => 'merk',
             'model'                    => 'model',
             'brandstof'                => 'brandstof',
-//            'basiskleur'               => 'kleur',
+            'basiskleur'               => 'kleur',
             'carrosserie'              => 'carrosserie',
             'transmissie'              => 'transmissie',
             'bouwjaar'                 => 'bouwjaar',
@@ -113,7 +113,7 @@ class IomsapiController extends Controller
 //            'aantal_deuren'            => 'aantal_deuren',
 //            'energielabel'             => 'energielabel',
 //            'max_trekgewicht'          => 'max_trekgewicht',
-//            'klantnr'                  => 'autobedrijf',
+            'klantnr'                  => 'autobedrijf',
 //            'merkdealer'               => 'merkdealer',
 //            'provincie'                => 'provincie',
 //            'verkoopprijs_handel'      => 'verkoopprijs_handel',
@@ -272,7 +272,7 @@ class IomsapiController extends Controller
                 $options['opties_' . $facetName] = $facet->getValue();
             }
         }
-//        $options['opties_autobedrijf'] = $this->inventory->getCompanyNames($this->clientNrs);
+        $options['opties_autobedrijf'] = $this->inventory->getCompanyNames($this->clientNrs);
 
         $collator = new Collator('fr_FR');
         $collator->setAttribute(Collator::CASE_FIRST, Collator::OFF);
@@ -584,8 +584,8 @@ class IomsapiController extends Controller
             'geplaatst'   => 'last_modified',
         ];
 
-        $orderBy        = $request->input('orderBy') ?? 'merk';
-        $orderDirection = $request->input('order') ?? 'asc';
+        $orderBy        = $request->input('orderBy') ?: 'geplaatst';
+        $orderDirection = $request->input('order') ?: 'desc';
 
         $orderBy = explode(',', $orderBy);
         $orderDirection = explode(',', $orderDirection);
@@ -672,7 +672,7 @@ class IomsapiController extends Controller
                 'merk',
                 'model',
                 'merkmodel',
-//                'basiskleur',
+                'basiskleur',
                 'brandstof',
                 'transmissie',
                 'voertuigsoort',
@@ -699,8 +699,8 @@ class IomsapiController extends Controller
         } else {
             $facets->createFacetField('merk')->setField('merk'); // has facet counter on smileycar
             $facets->createFacetField('model')->setField('model'); // has facet counter on smileycar
-//            $facets->createFacetField('basiskleur')->setField('basiskleur');
-//            $facets->createFacetField('brandstof')->setField('brandstof'); // has facet counter on smileycar
+            $facets->createFacetField('basiskleur')->setField('basiskleur');
+            $facets->createFacetField('brandstof')->setField('brandstof'); // has facet counter on smileycar
             $facets->createFacetField('carrosserie')->setField('carrosserie'); // has facet counter on smileycar
             $facets->createFacetField('transmissie')->setField('transmissie'); // has facet counter on smileycar
             $facets->createFacetField('voertuigsoort')->setField('voertuigsoort');
@@ -726,8 +726,8 @@ class IomsapiController extends Controller
 //        $facetPivot->addFields('merk,demovoertuig');
         $facetPivot = $facets->createFacetPivot('brandTransmissions');
         $facetPivot->addFields('merk,transmissie');
-//        $facetPivot = $facets->createFacetPivot('brandColors');
-//        $facetPivot->addFields('merk,basiskleur');
+        $facetPivot = $facets->createFacetPivot('brandColors');
+        $facetPivot->addFields('merk,basiskleur');
 //        $facetPivot = $facets->createFacetPivot('brandDoors');
 //        $facetPivot->addFields('merk,aantal_deuren');
 //        $facetPivot = $facets->createFacetPivot('brandSeats');
@@ -755,8 +755,8 @@ class IomsapiController extends Controller
 //        $facetPivot->addFields('merk,model,demovoertuig');
         $facetPivot = $facets->createFacetPivot('brandModelTransmissions');
         $facetPivot->addFields('merk,model,transmissie');
-//        $facetPivot = $facets->createFacetPivot('brandModelColors');
-//        $facetPivot->addFields('merk,model,basiskleur');
+        $facetPivot = $facets->createFacetPivot('brandModelColors');
+        $facetPivot->addFields('merk,model,basiskleur');
 //        $facetPivot = $facets->createFacetPivot('brandModelSeats');
 //        $facetPivot->addFields('merk,model,aantal_zitplaatsen');
 //        $facetPivot = $facets->createFacetPivot('brandModelDoors');
@@ -849,7 +849,8 @@ class IomsapiController extends Controller
                         'type',
                         'voertuigsoort'
                     ])) {
-                        $fq = $query->createFilterQuery($filter)->setQuery("$filter:\"$value\" OR {$filter}_lc:\"$value\"")->addTag($filterName);
+//                        $fq = $query->createFilterQuery($filter)->setQuery("$filter:\"$value\" OR {$filter}_lc:\"$value\"")->addTag($filterName);
+                        $fq = $query->createFilterQuery($filter)->setQuery("$filter:\"$value\"")->addTag($filterName);
                     } else {
                         $fq = $query->createFilterQuery($filter)->setQuery("$filter:\"$value\"")->addTag($filterName);
                     }
