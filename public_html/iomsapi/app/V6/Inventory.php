@@ -452,7 +452,7 @@ class Inventory extends Model
         $finalPaymentPct = $apiKey->lease_final_payment;
         $interestRate = $apiKey->lease_interest_rate;
 
-        $price = $this->verkoopprijs_particulier ?: 15000;
+        $price = $this->verkoopprijs ?: 15000;
 
         if ($apiKey->lease_max_age) {
             $looptijd = Helpers::calculateMaxLoopTijd($this->bouwjaar, $apiKey->lease_max_term, $apiKey->lease_min_term, $apiKey->lease_default_term, $apiKey->lease_max_age);

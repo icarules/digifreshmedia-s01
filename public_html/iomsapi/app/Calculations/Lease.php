@@ -10,14 +10,17 @@ class Lease
 {
     protected $response = [];
 
-    protected $aanbetaling;
+    protected $aanbetalingPercentage;
+
+    protected $slotTermijnPercentage;
 
     protected $rentePercentage;
 
-    public function __construct($aanbetaling = 0, $rentePercentage = 8.99)
+    public function __construct($aanbetalingPercentage = 0, $rentePercentage = 8.99, $slotTermijnPercentage = 0)
     {
-        $this->aanbetaling = ($aanbetaling === null ? 0 : $aanbetaling);
+        $this->aanbetalingPercentage = ($aanbetalingPercentage === null ? 0 : $aanbetalingPercentage);
         $this->rentePercentage = ($rentePercentage === null ? 8.99 : $rentePercentage);
+        $this->slotTermijnPercentage = ($slotTermijnPercentage === null ? 8.99 : $slotTermijnPercentage);
     }
 
     public function calculate(Request $request)
@@ -26,9 +29,7 @@ class Lease
         $leasebedrag = $this->parseValue($request->input('leasebedrag'));
         $btw = $request->input('btw');
         $bpm_bedrag = $request->input('bpm_bedrag');
-        $aanbetaling = $this->parseValue($request->input('aanbetaling'));
         $looptijd = $request->input('looptijd');
-        $slottermijn = $this->parseValue($request->input('slottermijn'));
         $grijskenteken = $request->input('grijskenteken');
         $inruilen = $request->input('inruilen');
         $inruil_prijsind = $this->parseValue($request->input('inruil_prijsind'));
@@ -40,10 +41,6 @@ class Lease
         $datum_deel_1 = $request->input('datum_deel_1');
 
         // Bereken te financieren bedrag
-        $aanbetaling = $aanbetaling ?: $this->aanbetaling;
-        if (is_null($aanbetaling)) {
-            $aanbetaling = 0;
-        }
         $rijklaarkosten = $aanschafwaarde + $afleverkosten;
         $this->response['afleverkosten']= $afleverkosten;
         $this->response['rijklaarkosten']= $rijklaarkosten;
@@ -60,8 +57,12 @@ class Lease
         $this->response['btw']= $btw;
         $this->response['aanschaf_excl']= $aanschaf_excl;
 
+        $slottermijn = $aanschaf_excl * ($this->slotTermijnPercentage / 100);
+
         if ($leasebedrag) {
             $aanbetaling = $aanschafwaarde - $leasebedrag;
+        } else {
+            $aanbetaling = $aanschafwaarde * ($this->aanbetalingPercentage / 100);
         }
         $this->response['aanbetaling']= $aanbetaling;
 
@@ -77,7 +78,7 @@ class Lease
         $this->response['tefinancieren'] = $tefinancieren;
 
         // Bereken leasetermijn
-        $C = $tefinancieren * 1.21;
+        $C = $tefinancieren;
         $F = $slottermijn;
         $r = $this->rentePercentage / 1200.0;
         $N = $looptijd;
@@ -133,6 +134,10 @@ class Lease
 
     private function parseValue($value)
     {
+        if (is_float($value)) {
+            return $value;
+        }
+
         $parsedValue = preg_replace("/[^0-9,]/", "", $value);
         $parsedValue = preg_replace("/,/", ".", $parsedValue);
 
