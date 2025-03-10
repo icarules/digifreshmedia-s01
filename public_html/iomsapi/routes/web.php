@@ -22,6 +22,8 @@ Auth::routes([
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/solr/import/{destination}', 'SolariumController@import')->name('import');
+
 Route::get('apikey', [
     'as'   => 'apikey.index',
     'uses' => 'Iomsapi\ApikeyController@index'

@@ -25,7 +25,7 @@
                     <th class="thSort <?= ($orderBy == 'id') ? 'active' : 'inactive';?>"><a href="/iomsapi/apikey?orderBy=id&sort=<?= ($orderBy == 'id' && $sort == 'asc') ? 'desc' : 'asc';?>">Id</a><?= ($orderBy == 'id') ? "<i class='fa-solid $iconClass float-right'></i>" : '';?></th>
                     <th class="thSort <?= ($orderBy == 'client_name') ? 'active' : 'inactive';?>"><a href="/iomsapi/apikey?orderBy=client_name&sort=<?= ($orderBy == 'client_name' && $sort == 'asc') ? 'desc' : 'asc';?>">Klantnaam</a><?= ($orderBy == 'client_name') ? "<i class='fa-solid $iconClass float-right'></i>" : '';?></th>
                     <th>Apikey</th>
-                    <th colspan="2">Acties</th>
+                    <th colspan="3">Acties</th>
                 </tr>
                 </thead>
                 <tbody id="apiKeys-crud">
@@ -35,8 +35,8 @@
                         <td>{{ $u_info->client_name }}</td>
                         <td>{{ $u_info->api_key }}</td>
                         <td><a href="javascript:void(0)" id="edit-apiKey" data-id="{{ $u_info->id }}" class="btn btn-sm btn-info">Wijzigen</a></td>
-                        <td>
-                            <a href="javascript:void(0)" id="delete-apiKey" data-id="{{ $u_info->id }}" data-client-name="{{ $u_info->client_name }}" class="btn btn-sm btn-danger delete-apiKey">Verwijderen</a></td>
+                        <td><a href="javascript:void(0)" id="delete-apiKey" data-id="{{ $u_info->id }}" data-client-name="{{ $u_info->client_name }}" class="btn btn-sm btn-danger delete-apiKey">Verwijderen</a></td>
+                        <td><a href="https://digifreshmedia.nl/solr/sync.php" target="_blank" class="btn btn-sm btn-warning">Sync solr</a></td>
                     </tr>
                 @endforeach
                 </tbody>
